@@ -3,13 +3,18 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin <account_id>.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 583323754395.dkr.ecr.eu-north-1.amazonaws.com
   build:
     commands:
       - echo Building Docker image...
       - docker build -t my-ecommerce-app .
-      - docker tag my-ecommerce-app:latest <account_id>.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-ecommerce-app:latest
+      - docker tag my-ecommerce-app:latest 583323754395.dkr.ecr.eu-north-1.amazonaws.com/codebuild:latest
   post_build:
     commands:
       - echo Pushing Docker image...
-      - docker push <account_id>.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-ecommerce-app:latest
+      - docker push 583323754395.dkr.ecr.eu-north-1.amazonaws.com/codebuild:latest
+      - echo Writing imagedefinitions.json...
+      - printf '[{"name":"my-ecommerce-app","imageUri":"583323754395.dkr.ecr.eu-north-1.amazonaws.com/codebuild:latest"}]' > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
