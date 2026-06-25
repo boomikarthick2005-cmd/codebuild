@@ -1,20 +1,26 @@
 version: 0.2
+
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 583323754395.dkr.ecr.eu-north-1.amazonaws.com
+
   build:
     commands:
-      - echo Building Docker image...
       - docker build -t my-ecommerce-app .
       - docker tag my-ecommerce-app:latest 583323754395.dkr.ecr.eu-north-1.amazonaws.com/codebuild:latest
+
   post_build:
     commands:
-      - echo Pushing Docker image...
       - docker push 583323754395.dkr.ecr.eu-north-1.amazonaws.com/codebuild:latest
-      - echo Writing imagedefinitions.json...
-      - printf '[{"name":"my-ecommerce-app","imageUri":"583323754395.dkr.ecr.eu-north-1.amazonaws.com/codebuild:latest"}]' > imagedefinitions.json
+
+      - echo "Starting ECS deployment..."
+
+      - aws ecs update-service \
+          --cluster codebuild-cluster \
+          --service codebuildtask-service-8s1w4pea \
+          --force-new-deployment
+
 artifacts:
   files:
-    - imagedefinitions.json
+    - '**/*'
