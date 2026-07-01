@@ -1,13 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My E-Commerce Store</title>
+    <meta charset="UTF-8">
+    <title>My Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            background-color: #f1c40f;
+            padding: 20px;
+            margin: 0;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #3498db;
+            color: white;
+            margin: 10px auto;
+            padding: 15px;
+            width: 250px;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: transform 0.2s;
+        }
+        li:hover {
+            transform: scale(1.05);
+            background: #1abc9c;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Store</h1>
+    <h1>🌟 Welcome to My Store 🌟</h1>
     <ul>
         {% for product in products %}
-            <li>{{ product.name }} - ${{ product.price }}</li>
+        <li>{{ product.name }} - ${{ product.price }}</li>
         {% endfor %}
     </ul>
 </body>
